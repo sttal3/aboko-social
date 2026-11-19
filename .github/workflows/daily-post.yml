@@ -1,0 +1,56 @@
+name: Daily post
+
+on:
+  schedule:
+    # Every day at 17:00 UTC (18:00 in Serbia in winter, 19:00 in summer). GitHub may start it a few minutes late.
+    - cron: '0 17 * * *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run: only show what would be posted'
+        type: boolean
+        default: true
+
+permissions:
+  contents: write   # to record what was posted in posted.json
+
+concurrency:
+  group: daily-post
+  cancel-in-progress: false
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Post the next video
+        env:
+          DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run && '1' || '0' }}
+          PAGES_BASE: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
+          IG_ENABLED: ${{ vars.IG_ENABLED }}
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          IG_TOKEN: ${{ secrets.IG_TOKEN }}
+          TIKTOK_MODE: ${{ vars.TIKTOK_MODE }}
+          TIKTOK_PRIVACY: ${{ vars.TIKTOK_PRIVACY }}
+          TIKTOK_CLIENT_KEY: ${{ secrets.TIKTOK_CLIENT_KEY }}
+          TIKTOK_CLIENT_SECRET: ${{ secrets.TIKTOK_CLIENT_SECRET }}
+          TIKTOK_REFRESH_TOKEN: ${{ secrets.TIKTOK_REFRESH_TOKEN }}
+          GH_PAT: ${{ secrets.GH_PAT }}
+        run: node scripts/post.mjs
+
+      - name: Record what was posted
+        if: always()
+        run: |
+          if [ -n "$(git status --porcelain posted.json)" ]; then
+            git config user.name "aboko-poster"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add posted.json
+            git commit -m "Posted $(date -u +%F)"
+            git push
+          fi
