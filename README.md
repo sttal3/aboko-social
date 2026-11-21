@@ -61,17 +61,17 @@ This is already set up (Settings → Pages → Deploy from branch `main`, folder
 ### 4. TikTok connection
 1. Go to https://developers.tiktok.com, then Manage apps → **Connect an app**.
 2. Fill in the app details:
-   - Website: `https://kovak-web.vercel.app`
+   - Website: `https://www.aboko.app`
    - Terms: `https://sttal3.github.io/kovak/terms.html`
    - Privacy: `https://sttal3.github.io/kovak/privacy.html`
 3. Add the products **Login Kit** and **Content Posting API**, with **Direct Post** switched on, and the scopes `user.info.basic`, `video.upload` and `video.publish`.
-4. In Login Kit, add the redirect URI `https://kovak-web.vercel.app/`.
+4. In Login Kit, add the redirect URI `https://www.aboko.app/`.
 5. Submit the app for review, and apply for the **Content Posting API audit** (needed for public posts).
 6. When the app is approved, run these on your computer:
    ```bash
-   node scripts/tiktok-login.mjs <client_key> https://kovak-web.vercel.app/
+   node scripts/tiktok-login.mjs <client_key> https://www.aboko.app/
    # open the link, allow access, copy "code=..." from the address bar of the page you land on
-   node scripts/tiktok-login.mjs <client_key> https://kovak-web.vercel.app/ <client_secret> <code>
+   node scripts/tiktok-login.mjs <client_key> https://www.aboko.app/ <client_secret> <code>
    ```
 
 **Before TikTok's audit passes,** TikTok only allows private posts through its API. Use `TIKTOK_MODE=inbox`: each day's video arrives in your TikTok inbox as a draft, and you tap it, check it and post. TikTok allows at most 5 waiting drafts.
