@@ -62,8 +62,8 @@ This is already set up (Settings → Pages → Deploy from branch `main`, folder
 1. Go to https://developers.tiktok.com, then Manage apps → **Connect an app**.
 2. Fill in the app details:
    - Website: `https://www.aboko.app`
-   - Terms: `https://sttal3.github.io/kovak/terms.html`
-   - Privacy: `https://sttal3.github.io/kovak/privacy.html`
+   - Terms: `https://www.aboko.app/terms`
+   - Privacy: `https://www.aboko.app/privacy`
 3. Add the products **Login Kit** and **Content Posting API**, with **Direct Post** switched on, and the scopes `user.info.basic`, `video.upload` and `video.publish`.
 4. In Login Kit, add the redirect URI `https://www.aboko.app/`.
 5. Submit the app for review, and apply for the **Content Posting API audit** (needed for public posts).
